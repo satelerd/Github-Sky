@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 import numpy as np
 import matplotlib.pyplot as plt
 
-
+# SCRAPER
 def get_user_contributions(user):
     """
     Funcion que dado un usuario de github, devuelve la cantidad de contribuciones que ha hecho.
@@ -37,7 +37,7 @@ def get_user_contributions(user):
     return dates, data_count, data_level
 
 
-# Crea una funcion que dado los datos de contribuciones genera un grafico que los muestra.
+# GRAPH GENERATOR
 def generate_plot(dates, data):
     """
     Funcion que dado un diccionario de contribuciones, genera un grafico con ellas.
@@ -73,8 +73,6 @@ def generate_plot(dates, data):
     plt.show()
 
 
+# FUNCTION CALL
 dates, data_count, data_level = get_user_contributions("satelerd")
-# print(dates)
-# print(data_count)
-# print(data_level)
 generate_plot(dates, data_level)
