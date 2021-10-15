@@ -5,6 +5,7 @@ Lo siguiente es el codigo para un proyecto que se llama Github Sky, en el cual d
 import requests
 from bs4 import BeautifulSoup
 import numpy as np
+import random
 import matplotlib.pyplot as plt
 
 # SCRAPER
@@ -41,11 +42,12 @@ def get_user_contributions(user):
 def star_generator(data):
     # Se crea una matriz de ceros de tamaño len(data_level)/7 x 7
     data_matrix = np.zeros((int(len(data) / 7), 7))
-    data_matrix[0, 0] = 5
-    data_matrix[2, 2] = 5
-    data_matrix[2, 5] = 5
     data_matrix = data_matrix.T
-    print(data_matrix)
+
+    # data_matrix[0, 0] = 5
+    # data_matrix[2, 2] = 5
+    # data_matrix[2, 5] = 5
+    # print(data_matrix)
 
     # Se llena la matriz con los datos de data_count
     for i in range(len(data)):
@@ -55,27 +57,48 @@ def star_generator(data):
         except:  # NO SE LLENA LA MATRIZ COMPLETA, OJO!!!!!
             break
 
-    
     # Generamos la matriz principal que sera graficada   (matriz y desp pasarlo a lista para graficarlo mejor... en volaa)
+    stars = []
     weeks = 52
     days = 7
-    rows_day, cols_day = 100
+    rows_day = 50
+    cols_day = 50
     for week in range(weeks):
-
         for day in range(days):
 
-            # aca definimos el valor de cuantas estrellas generar en ese dia
+            # aca definimos el valor de cuantas estrellas generar en ese dia, y las agregamos a una lista en orden random
+            level = int(data[day + days * week])
+            stars_cuantity = rows_day * cols_day / 6 * (level + 1)
+            day_stars = []
+            for i in range(rows_day * cols_day):
+                if i <= stars_cuantity:
+                    day_stars.append(1)
+                else:
+                    day_stars.append(0)
+            random.shuffle(day_stars)
 
+            day_matrix = []
             for row in range(rows_day):
+                row_matrix = []
+
                 for col in range(cols_day):
-
                     # aqui vamos agregando un valor binario si hay o no estrella
+                    row_matrix.append(day_stars[row * cols_day + col])
+
+                day_matrix.append(row_matrix)
+
+            stars.append(day_matrix)
+
+    return stars
 
 
+def grafica(star_matrix):
+    star_list = [[], [], [], [], [], [], [], [], [], [], [], [], [], []]
+    cont = 0
+    while True:
 
-            # aqui se deberia agregar los datos de cada dia a la matriz principal
-
-    # una vez generado todo, hay que graficarlo
+        cont += 1
+    print(star_matrix)
 
 
 def generate_plot(dates, data):
@@ -108,4 +131,6 @@ def generate_plot(dates, data):
 
 # FUNCTION CALL
 dates, data_count, data_level = get_user_contributions("satelerd")
-star_generator(data_level)
+stars_matrix = star_generator(data_level)
+print(stars_matrix)
+# grafica(stars_list)
