@@ -1,8 +1,9 @@
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, StopParsing
 import numpy as np
 import random
 import matplotlib.pyplot as plt
+import matplotlib.pyplot as mat2gray
 
 data_count = [
     "0",
@@ -776,16 +777,19 @@ def star_generator(data):
     """
 
     # Generate the principal matrix which will be graphed
-    stars = []
+    stars = (
+        []
+    )  # List in witch each element represents a day, and inside each day a list with 0 and 1, 0 if there is no star, 1 if there is a star
     weeks = 52
+    weeks = 10
     days = 7
-    rows_day = 2
-    cols_day = 2
-    for week in range(weeks):
+    rows_day = 3
+    cols_day = 3
+    for week in range(12, weeks + 12):
         for day in range(days):
             # Here we define the value of how many starts we need to generate that day
             # Then we add it to a list in a random order
-            level = int(data[day + days * week])
+            level = int(data[day + (days * week)])
             stars_cuantity = rows_day * cols_day / 6 * (level + 1)
             day_stars = []
             for i in range(rows_day * cols_day):
@@ -805,73 +809,14 @@ def star_generator(data):
                 day_matrix.append(row_matrix)
             stars.append(day_matrix)
 
-    stars_matrix = []
-    column = []
-    column2 = []
-    cont = 0
-    for day in stars:
-        if cont % 7 == 0:
-            stars_matrix.append(column)
-            stars_matrix.append(column2)
+    # stars is actually a tensor
+    # so now we have to generate a list that will reorder the stars in the tensor so that it become a matrix and it can be graphed.
 
-        column.append(day[0][0])
-        column.append(day[1][0])
-        column2.append(day[0][1])
-        column2.append(day[1][1])
-
-        cont += 1
-
-    return stars_matrix
+    return stars
 
 
 def stars_graph(stars_matrix):
-    plt.scatter(stars_matrix)
-    plt.show()
-
-    # # y list
-    # y = []
-    # for i in range(len(stars_matrix[0])):
-    #     y.append(i)
-
-    # cont = 0
-
-    # for week in stars_matrix:
-    #     print(week)
-    #     # Añade la lista week a un grafico, week es el eje X e y es el eje Y.
-    #     for i in range(len(week)):
-    #         if cont % 2 == 0:
-    #             week[i] += 1
-
-    #     plt.scatter(week, y, s=4)  # ,'ro'
-    #     cont += 1
-    # plt.show()
-
-
-def generate_plot(dates, data):
-    """
-    Function that given a list of contributions generate a graph of it
-    """
-
-    # Se crea una matriz de ceros de tamaño len(data_level)/7 x 7
-    data_matrix = np.zeros((int(len(data_level) / 7), 7))
-    # Se llena la matriz con los datos de data_count
-    for i in range(len(data_level)):
-        try:
-            data_matrix[int(i / 7), i % 7] = data_level[i]
-
-        except:  # NO SE LLENA LA MATRIZ COMPLETA, OJO!!!!!
-            break
-
-    # Se crea una figura y una subfigura
-    fig, ax = plt.subplots()
-    # Se grafica la matriz
-    ax.imshow(data_matrix)
-    ax.set_title("Contribuciones")
-    ax.set_xlabel("Dias")
-    ax.set_ylabel("Semana")
-    # Se agrega el label a cada celda
-    for i in range(len(data)):
-        ax.text(i % 7, int(i / 7), data[i], ha="center", va="center", color="w")
+    plt.imshow(stars_matrix, cmap="binary")
     plt.show()
 
 
@@ -879,6 +824,9 @@ def generate_plot(dates, data):
 # dates, data_count, data_level = get_user_contributions("satelerd")
 
 stars_matrix = star_generator(data_level)
+# print(stars_matrix)
+# stars_matrix = np.array(stars_matrix)
+print(stars_matrix)
 
 stars_graph(stars_matrix)
 # grafica(stars_list)
