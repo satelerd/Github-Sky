@@ -86,7 +86,7 @@ def stars_graph(stars_matrix):
 
 
 # FUNCTION CALL
-# dates, data_count, data_level = get_user_contributions("satelerd")
+dates, data_count, data_level = get_user_contributions("satelerd")
 
 stars_matrix = star_generator(data_level)
 # print(stars_matrix)
