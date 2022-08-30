@@ -1,3 +1,3 @@
 # Github-Sky
 
-A different way to visualize your contribution stats on GitHub.
+A different way to visualize your contribution stats of GitHub.
